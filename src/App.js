@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import Fruit from './components/Fruit'
+import FruitForm from './components/FruitForm'
 import './App.css';
 
 // My first component
@@ -31,47 +33,37 @@ function App() {
     { id: 3, name: "Cerise" }
   ]);
 
-  const [newFruit, setNewFruit] = useState("");
 
-  const handleClick = (id) => {
+
+  const removeFruit = (id) => {
     const fruitsCopy = [...fruits];
     const fruitsCopyUpdated = fruitsCopy.filter((fruit) => fruit.id !== id);
     setFruits(fruitsCopyUpdated);
   }
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
+  const handleAdd = (fruitToAdd) => {
     const fruitsCopy = [...fruits];
-
-    const id = new Date().getTime();
-    const name = newFruit;
-
-    fruitsCopy.push({ id, name });
-
+    fruitsCopy.push(fruitToAdd);
     setFruits(fruitsCopy);
-    setNewFruit("");
   }
 
-  const handleChange = (event) => {
-    setNewFruit(event.target.value);
+  const displayFavouritFruit = (fruitName) => {
+    alert(`Love ${fruitName} !`);
   }
-
+  
   return (
     <>
       <h1>Fruit list</h1>
       <ul>
         {fruits.map((fruit) => (
-          <li key={fruit.id}>
-            {fruit.name} <button onClick={() => handleClick(fruit.id)}>X</button>
-          </li>
+          <Fruit
+            key={fruit.id}
+            fruit={fruit}
+            onClick={() => displayFavouritFruit(fruit.name)} />
         ))}
       </ul>
       <h2>Add Fruit</h2>
-      <form action="post" onSubmit={handleSubmit}>
-        <input type="text" value={newFruit} onChange={handleChange} />
-        <button type="submit">Submit</button>
-      </form>
+      <FruitForm handleAdd={handleAdd} />
     </>
   )
 }
